@@ -1,0 +1,366 @@
+@import url(http://fonts.googleapis.com/css?family=Marmelad);
+
+*
+{ 
+    margin: 0;
+    padding: 0;
+    
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box; 
+}
+
+body 
+{
+    font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1000px;
+}
+
+h2
+{ 
+    font-family: "Marmelad", Calibri, sans-serif; 
+    margin: 0 0 1.5em; 
+    border-bottom: 1px solid #ccc; 
+    padding: 0 0 .25em;
+}
+
+ul li 
+{ 
+    width: 50%; 
+    float: left; 
+    padding-right: 3.33333%; 
+    list-style: none;
+}
+
+/* 
+ * Determinate progress bar
+ * ------------------------
+ */
+
+progress[value]
+{
+    /* Override the default appearence */
+      -webkit-appearance: none;
+         -moz-appearance: none;
+              appearance: none;
+
+      /* Gets rid of the default border in Firefox and Opera. */ 
+      border: none;
+
+    /* Dimensions */  
+    width: 100%;
+    height: 20px;  
+  
+    /* For IE10 only */
+    color: #690;
+  
+    /* Firefox only (for container) */
+    background-color: #eee;
+    border-radius: 2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25) inset;
+}
+  
+/* 
+ * Webkit browsers only - Progress bar container
+ * ---------------------------------------------
+ */
+
+progress[value]::-webkit-progress-bar 
+{
+    background-color: #eee;
+    border-radius: 2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25) inset;
+  
+    position: relative;
+}
+
+/* 
+ * Webkit browsers only - Progress bar value
+ * -----------------------------------------
+ */
+
+progress[value]::-webkit-progress-value 
+{
+    border-radius: 2px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+  
+    position: relative;  
+
+    -webkit-animation: animate-stripes 5s linear infinite;
+            animation: animate-stripes 5s linear infinite;
+}
+
+/* 
+ * Webkit browsers only - CSS3 keyframe animations
+ * -----------------------------------------------
+ */
+
+@-webkit-keyframes animate-stripes { 100% { background-position: -100px 0px; } }
+        @keyframes animate-stripes { 100% { background-position: -100px 0px; } }
+
+/* 
+ * Webkit browsers only - Pseudo elements
+ * --------------------------------------
+ */
+
+progress[value]::-webkit-progress-value:after
+{
+    content: '';
+    position: absolute;
+  
+    width: 6px;
+    height: 6px;
+    right: 7px;
+    top: 7px;
+  
+    border-radius: 100%;
+    background-color: rgba(255, 255, 255, 1);
+}
+
+progress[value]::-webkit-progress-value:before
+{
+    position: absolute;
+    right: 0;
+    top: -125%;
+}
+
+/* 
+ * Firefox only - Progress bar value
+ * ---------------------------------
+ */
+
+progress[value]::-moz-progress-bar 
+{
+    border-radius: 2px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+  
+    position: relative;
+}
+
+/* 
+ * For demo only
+ * -------------
+ */
+
+.html5::-webkit-progress-value, .python::-webkit-progress-value
+{
+    background-image:
+         -webkit-linear-gradient( 135deg, 
+                                  transparent, 
+                                  transparent 33%, 
+                                  rgba(0, 0, 0, .1) 33%, 
+                                  rgba(0, 0, 0, .1) 66%,
+                                  transparent 66%),
+         -webkit-linear-gradient( top, 
+                                  rgba(255, 255, 255, .25), 
+                                  rgba(0, 0, 0, .2)),
+         -webkit-linear-gradient( left, #09c, #f44); 
+}
+
+.html5::-moz-progress-bar, .python::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #f44); 
+}
+
+.css3::-webkit-progress-value, .php::-webkit-progress-value
+{
+    background-image:
+         -webkit-linear-gradient( 135deg, 
+                                  transparent, 
+                                  transparent 33%, 
+                                  rgba(0, 0, 0, .1) 33%, 
+                                  rgba(0, 0, 0, .1) 66%,
+                                  transparent 66%),
+         -webkit-linear-gradient( top, 
+                                  rgba(255, 255, 255, .25), 
+                                  rgba(0, 0, 0, .2)),
+         -webkit-linear-gradient( left, #09c, #ff0); 
+}
+
+.css3::-moz-progress-bar, .php::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #ff0); 
+}
+
+.jquery::-webkit-progress-value, .nodejs::-webkit-progress-value
+{
+    background-image:
+         -webkit-linear-gradient( 135deg, 
+                                  transparent, 
+                                  transparent 33%, 
+                                  rgba(0, 0, 0, .1) 33%, 
+                                  rgba(0, 0, 0, .1) 66%,
+                                  transparent 66%),
+         -webkit-linear-gradient( top, 
+                                  rgba(255, 255, 255, .25), 
+                                  rgba(0, 0, 0, .2)),
+         -webkit-linear-gradient( left, #09c, #690); 
+}
+
+.jquery::-moz-progress-bar, .nodejs::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #690); 
+}
+
+.js[value^="1"]::-moz-progress-bar, .zf[value^="1"]::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #39a); 
+}
+.js[value^="2"]::-moz-progress-bar, .zf[value^="2"]::-moz-progress-bar,
+.js[value^="3"]::-moz-progress-bar, .zf[value^="3"]::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #690); 
+}
+.js[value^="4"]::-moz-progress-bar, .zf[value^="4"]::-moz-progress-bar,
+.js[value^="5"]::-moz-progress-bar, .zf[value^="5"]::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #690, #ff0); 
+}
+.js[value^="6"]::-moz-progress-bar, .zf[value^="6"]::-moz-progress-bar,
+.js[value^="7"]::-moz-progress-bar, .zf[value^="7"]::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #690, #ff0, #ffa500); 
+}
+.js[value^="8"]::-moz-progress-bar, .zf[value^="8"]::-moz-progress-bar,
+.js[value^="9"]::-moz-progress-bar, .zf[value^="9"]::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #690, #ff0, #ffa500, #f44); 
+}
+.js[value="100"]::-moz-progress-bar, .zf[value="100"]::-moz-progress-bar
+{
+    background-image:
+         -moz-linear-gradient( 135deg, 
+                               transparent, 
+                               transparent 33%, 
+                               rgba(0, 0, 0, .1) 33%, 
+                               rgba(0, 0, 0, .1) 66%,
+                               transparent 66%),
+         -moz-linear-gradient( top, 
+                               rgba(255, 255, 255, .25), 
+                               rgba(0, 0, 0, .2)),
+         -moz-linear-gradient( left, #09c, #690, #ff0, #ffa500, #f44, #f44); 
+}
+
+/* 
+ * HTML Fallback Technique
+ * -----------------------
+ */
+
+.progress-bar 
+{
+    background-color: whiteSmoke;
+    border-radius: 2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .25) inset;
+  
+    height: 20px;  
+    /*width: 100%;*/
+  
+    position: relative;
+}
+
+span 
+{
+    background-color: blue;
+    border-radius: 2px;
+  
+    display: block;
+
+    height: 100%;
+    text-indent: -9999px;
+}
+
+p[data-value] 
+{
+    position: relative;
+    line-height: 200%;
+    /*margin: 1.5em 0 0;*/
+}
+
+p[data-value]:after
+{
+    content: attr(data-value) "%";
+    position: absolute;
+    right: 0;
+}
