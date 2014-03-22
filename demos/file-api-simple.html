@@ -25,12 +25,14 @@ upload.onchange = function (e) {
   reader.onload = function (event) {
     var img = new Image();
     img.src = event.target.result;
-    // note: no onload required since we've got the dataurl...I think! :)
-    if (img.width > 560) { // holder width
-      img.width = 560;
-    }
-    holder.innerHTML = '';
-    holder.appendChild(img);
+    img.onload = function () {
+      // note: no onload required since we've got the dataurl...I think! :)
+      if (img.width > 560) { // holder width
+        img.width = 560;
+      }
+      holder.innerHTML = '';
+      holder.appendChild(img);
+    };
   };
   reader.readAsDataURL(file);
 
