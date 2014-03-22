@@ -34,6 +34,8 @@ By submitting any code, you're also agreeing that your code is covered by the MI
 
 # TODO
 
+* ~~upload progress bar support~~
+
 ## Demos Required
 
 * Microdata

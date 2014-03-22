@@ -1,14 +1,16 @@
 <title>Drag and drop, automatic upload</title>
 <style>
-#holder { border: 10px dashed #ccc; width: 300px; min-height: 300px; margin: 20px auto;}
+#holder { position: relative; width: 300px; min-height: 300px; margin: 20px auto; border: 1px dotted #ccc; }
 #holder.hover { border: 10px dashed #0c0; }
-#holder img { display: block; margin: 10px auto; }
+#holder img { position: absolute; display: block; width: auto; margin: 10px auto; }
 #holder p { margin: 10px; font-size: 14px; }
+article > div, article > p { margin: 20px; }
 progress { width: 100%; }
 progress:after { content: '%'; }
 .fail { background: #c00; padding: 2px; color: #fff; }
 .hidden { display: none !important;}
 </style>
+<link rel="stylesheet" href="/css/progress.css">
 <article>
   <div id="holder">
   </div> 
@@ -17,6 +19,17 @@ progress:after { content: '%'; }
   <p id="formdata">XHR2's FormData is not supported</p>
   <p id="progress">XHR2's upload progress isn't supported</p>
   <p>Upload progress: <progress id="uploadprogress" min="0" max="100" value="0">0</progress></p>
+  
+  <!-- JavaScript -->
+  <p id="progress-info" style="width: 0%; min-width: 20%;" data-value="0">Upload</p>
+  <div>
+    <progress id="xhr-upload-progress" class="js" value="0" max="100">
+      <div class="progress-bar">
+        <span style="width: 0%;">0%</span>
+      </div>
+    </progress>
+  </div>
+
   <p>Drag an image from your desktop on to the drop zone above to see the browser both render the preview, but also upload automatically to this server.</p>
 </article>
 <script>
@@ -38,7 +51,14 @@ var holder = document.getElementById('holder'),
       'image/gif': true
     },
     progress = document.getElementById('uploadprogress'),
+    xhrUploadProgress = document.getElementById('xhr-upload-progress'),
+    progressinfo = document.querySelector('p#progress-info'),
     fileupload = document.getElementById('upload');
+
+var _startX = 0; // mouse starting positions
+var _startY = 0;
+var _offsetX = 0; // current element offset
+var _offsetY = 0;
 
 "filereader formdata progress".split(' ').forEach(function (api) {
   if (tests[api] === false) {
@@ -59,6 +79,28 @@ function previewfile(file) {
       var image = new Image();
       image.src = event.target.result;
       image.width = 250; // a fake resize
+      image.style.top  = '25px';
+      image.style.left = '50px';
+
+      // make image draggable
+      image.id = 'i-' + (new Date()).getTime();
+      image.setAttribute('draggable', 'true');
+
+      console.log(image, 'image');
+
+      addEvent(image, 'dragstart', function (e) {
+        console.log('dragstart');
+        e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
+        e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
+        
+        // grab the mouse position
+        _startX = e.clientX;
+        _startY = e.clientY;
+        // grab the clicked element's position
+        _offsetX = ExtractNumber(e.target.style.left);
+        _offsetY = ExtractNumber(e.target.style.top);
+      });
+
       holder.appendChild(image);
     };
 
@@ -69,11 +111,21 @@ function previewfile(file) {
   }
 }
 
+function updateUploadProgressBar(progressinfo, progressbar, value) {
+  progressinfo.setAttribute('data-value', value);
+  progressinfo.style.width = value + "%";
+
+  progressbar.value = value;
+  document.querySelector('.progress-bar span').innerHTML = value + '%';
+  document.querySelector('.progress-bar span').style.width = value + "%";
+}
+
 function readfiles(files) {
-    debugger;
+    //debugger;
     var formData = tests.formdata ? new FormData() : null;
+    console.log(files, 'files');
     for (var i = 0; i < files.length; i++) {
-      if (tests.formdata) formData.append('file', files[i]);
+      if (tests.formdata) formData.append('file['+i+']', files[i]);
       previewfile(files[i]);
     }
 
@@ -83,13 +135,21 @@ function readfiles(files) {
       xhr.open('POST', '/devnull.php');
       xhr.onload = function() {
         progress.value = progress.innerHTML = 100;
+        console.log('data sent');
+        
+        updateUploadProgressBar(progressinfo, xhrUploadProgress, 100)
       };
 
       if (tests.progress) {
         xhr.upload.onprogress = function (event) {
+          console.log(event, 'onprogress event');
           if (event.lengthComputable) {
+            console.log(event.loaded, 'loaded');
             var complete = (event.loaded / event.total * 100 | 0);
+            console.log(complete, 'complete');
             progress.value = progress.innerHTML = complete;
+
+            updateUploadProgressBar(progressinfo, xhrUploadProgress, complete);
           }
         }
       }
@@ -99,18 +159,59 @@ function readfiles(files) {
 }
 
 if (tests.dnd) { 
-  holder.ondragover = function () { this.className = 'hover'; return false; };
-  holder.ondragend = function () { this.className = ''; return false; };
+  holder.ondragover = function (e) {
+    this.className = 'hover';
+//     console.log("X: "+e.pageX+" Y: "+e.pageY);
+    
+    return false;
+  };
+  holder.ondragleave = function (e) {
+    this.className = '';
+//     console.log("X: "+e.pageX+" Y: "+e.pageY);
+
+    return false;
+  };
+  holder.ondragend = function () {
+    this.className = '';
+    return false;
+  };
   holder.ondrop = function (e) {
+    console.log(e, 'drop event');
     this.className = '';
     e.preventDefault();
     readfiles(e.dataTransfer.files);
+
+    switch (e.dataTransfer.dropEffect) {
+      case 'none':
+        console.log('none operation...');
+        break;
+      case 'copy':
+        console.log('copy operation...');
+        if (e.stopPropagation) e.stopPropagation();
+        var el = document.getElementById(e.dataTransfer.getData('Text'));
+        console.log(el);
+        var x = (_offsetX + e.clientX - _startX),
+            y = (_offsetY + e.clientY - _startY);
+        el.style.top  = y+'px';
+        el.style.left = x+'px';
+        return false;
+      case 'move':
+          console.log('move operation...');
+          break;
+      default:
+          console.log('unrecognized operation: '+e.dataTransfer.dropEffect+'...');
+    }
   }
 } else {
   fileupload.className = 'hidden';
   fileupload.querySelector('input').onchange = function () {
     readfiles(this.files);
   };
+}
+
+function ExtractNumber(value) {
+  var n = parseInt(value);
+  return n == null || isNaN(n) ? 0 : n;
 }
 
 </script>
